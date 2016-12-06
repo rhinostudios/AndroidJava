@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bird Animation</title>
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		background-color: #000000;
+		}
+		.rendererView {
+			position: absolute;
+			display: block;
+			width: 100%;
+			height: 100%;
+	}
+</style>
+</head>
+<body>
+<script src="pixi.js"></script>
+<script>
+//IMPORTANT NOTE: Uses Pixi v3
+//renderer className NOT required
+var viewWidth = 1021; var viewHeight=306;
+var renderer = PIXI.autoDetectRenderer(viewWidth, viewHeight);
+//renderer.view.className = "rendererView";
+document.body.appendChild(renderer.view);
+var stage = new PIXI.Stage();//container or stage
+
+var B = PIXI.Texture.fromImage('media/sky.png');
+var S = new PIXI.Sprite(B);
+
+stage.addChild(S);
+
+// set how many birds we would like to add
+var totalbird = 20;
+// create an array to store a reference to the bird in the pond
+var birdArray = [];
+for (var i = 0; i < totalbird; i++)
+{
+	 var birdId = i % 4; birdId += 1;
+     var imagePath = 'media/bird.png';
+     var birdTexture = PIXI.Texture.fromImage(imagePath);
+     var bird = new PIXI.Sprite(birdTexture);
+     // set the anchor point so the bird texture is centred on the sprite
+     bird.anchor.x = bird.anchor.y = 0.5;
+     // set a random scale for the bird - no point them all being the same size!
+     bird.scale.x = bird.scale.y = 0.8 + Math.random() * 0.3;
+// finally let’s set the bird to be a random position..
+    bird.position.x = Math.random() * viewWidth; bird.position.y = Math.random() * viewHeight;
+    // time to add the bird to the sky container!
+    stage.addChild(bird);
+//================MOVEMENT============================//
+// create a random direction in radians. This is a number between 0 and PI*2 
+// which is the equivalent of 0 - 360 degrees
+     bird.direction = Math.random() * Math.PI * 2;
+     // this number will be used to modify the direction of the bird over time
+     bird.turningSpeed = Math.random() - 0.8;
+     // create a random speed for the bird between 0 - 2
+     bird.speed = 2 + Math.random() * 2;
+     // finally we push the bird into the birdArray so it it can be easily accessed later
+     birdArray.push(bird);
+	}
+	
+// create a bounding box for the little bird
+var birdBoundsPadding = 100;
+var birdBounds = new PIXI.Rectangle(-birdBoundsPadding,
+                     -birdBoundsPadding,
+                     viewWidth + birdBoundsPadding * 2,
+                     viewHeight + birdBoundsPadding * 2);
+//x    y    w    h	
+//padding ensures the bird are off screen 
+//before it wraps to avoid any 'popping'.
+
+var tick = 0;
+requestAnimationFrame(animate);
+function animate()
+{// iterate through the bird and update the position
+     for (var i = 0; i < birdArray.length; i++)
+     {
+          var bird = birdArray[i];
+          bird.direction += bird.turningSpeed * 0.01;
+          bird.position.x += Math.sin(bird.direction) * bird.speed;
+          bird.position.y += Math.cos(bird.direction) * bird.speed;
+          bird.rotation = -bird.direction - Math.PI/2;
+          // wrap the bird by testing there bounds..
+          if(bird.position.x < birdBounds.x)bird.position.x += birdBounds.width;
+          else if(bird.position.x > birdBounds.x + birdBounds. width)bird.position.x -= birdBounds.width
+          if(bird.position.y < birdBounds.y)bird.position.y += birdBounds.height;
+          else if(bird.position.y > birdBounds.y + birdBounds. height)bird.position.y -= birdBounds.height
+      }
+// increment the ticker
+tick += 1;
+console.log(tick);
+// time to render the state!
+renderer.render(stage);
+// request another animation frame
+requestAnimationFrame( animate );
+}
+</script>
+</body>
+</html>
