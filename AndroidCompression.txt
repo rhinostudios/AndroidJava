@@ -1,0 +1,18 @@
+Android Photo Compression
+=================================
+Use Gallery and these apps conserve memory.
+ Install PhotoCompress and BatchResize
+
+Gallery > Select img > Share all img to...
+
+PhotoCompress 
+Blank screen for 2min while loading
+Tap screen every 30s to prevent Sleep
+Quality = Set to your choice
+ 
+Gallery > Select img > Share all img to...
+
+BatchResize
+Blank screen for 2min while loading
+Tap screen every 30s to prevent Sleep
+Resize = Set to your choice
